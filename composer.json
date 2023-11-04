@@ -1,0 +1,25 @@
+{
+    "name": "stillat/social-media-image-kit",
+    "autoload": {
+        "psr-4": {
+            "Stillat\\SocialMediaImageKit\\": "src"
+        }
+    },
+    "require": {
+        "php": "^8.0",
+        "statamic/cms": "^4",
+        "spatie/browsershot": "^3",
+        "stillat/statamic-template-resolver": "^1.0"
+    },
+    "extra": {
+        "statamic": {
+            "name": "Social Media Image Kit",
+            "description": "Social Media Image Kit addon"
+        },
+        "laravel": {
+            "providers": [
+                "Stillat\\SocialMediaImageKit\\ServiceProvider"
+            ]
+        }
+    }
+}

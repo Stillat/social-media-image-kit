@@ -1,0 +1,73 @@
+title: 'Social Media Images'
+fields:
+  -
+    handle: social_media_images
+    field:
+      mode: stacked
+      reorderable: true
+      fullscreen: true
+      type: grid
+      display: 'Social Media Images'
+      icon: grid
+      localizable: false
+      listable: hidden
+      instructions_position: above
+      visibility: visible
+      replicator_preview: true
+      hide_display: false
+      fields:
+        -
+          handle: asset_social_media_image
+          field:
+            max_files: 1
+            mode: list
+            container: social_media_images
+            restrict: false
+            allow_uploads: true
+            show_filename: true
+            show_set_alt: true
+            type: assets
+            display: Image
+            icon: assets
+            localizable: false
+            listable: hidden
+            instructions_position: above
+            visibility: visible
+            replicator_preview: true
+            hide_display: false
+            width: 66
+            readonly: true
+        -
+          handle: social_media_image_type
+          field:
+            taggable: false
+            push_tags: false
+            multiple: false
+            clearable: false
+            searchable: true
+            cast_booleans: false
+            type: social_media_image_type
+            display: 'Social Media Platform'
+            icon: social_media_image_type
+            localizable: false
+            listable: hidden
+            instructions_position: above
+            visibility: visible
+            replicator_preview: true
+            hide_display: false
+            width: 33
+        -
+          handle: preserve_image
+          field:
+            default: false
+            type: toggle
+            display: 'Preserve Image'
+            icon: toggle
+            instructions: 'Set this to true to ensure any customized images are not overwritten when updating social media images.'
+            localizable: false
+            width: 50
+            listable: hidden
+            instructions_position: above
+            visibility: visible
+            replicator_preview: true
+            hide_display: false
