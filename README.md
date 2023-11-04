@@ -239,3 +239,17 @@ class AppServiceProvider extends ServiceProvider
 ```
 
 > Warning: Only apply general settings. The window size will be set Social Media Image Kit.
+
+## Rendering META Tags
+
+Generating social media images is great, but doesn't do much good if we don't output the meta tags to make them discoverable.
+
+We can do that by adding the following Antlers snippet to your site's `<head></head>`:
+
+```antlers
+{{ get_social_media_images :images="social_media_images" }}
+<meta {{ attribute_string }} content="{{ url }}" />
+{{ /get_social_media_images }}
+```
+
+Note to self: make it automatically find the `images` if we omit it so its a bit friendlier.
