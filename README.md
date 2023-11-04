@@ -203,3 +203,39 @@ When creating templates, be sure to keep the following considerations in mind:
 * Templates are rendered using raw HTML, and do not make a request to your site for each page
 * When running your site using commands like `php artisan serve` and your template makes use of images or other assets, be sure this is still running when you generate social media images
 
+
+## Configuring the Browershot Instance
+
+Not all systems are created equal, and sometimes you may need to modify the Browershot settings. To modify the settings, you can use the `Stillat\SocialMediaImageKit\SocialMediaImageKit` helper class.
+
+For instance, you could place something like this in your `AppServiceProvider` if running on Windows:
+
+```php
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Stillat\SocialMediaImageKit\SocialMediaImageKit;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        SocialMediaImageKit::configureBrowsershot(function (Browsershot $browsershot) {
+            $browsershot->setCustomTempPath('C:/chromedata/tmp')
+                ->setUserDataDir('C:/chromedata')
+                ->setNodeBinary('C:/Program Files/nodejs/node.exe')
+                ->waitUntilNetworkIdle()
+                ->newHeadless()
+                ->noSandbox();
+        });
+    }
+}
+
+```
+
+> Warning: Only apply general settings. The window size will be set Social Media Image Kit.
