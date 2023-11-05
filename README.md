@@ -177,6 +177,24 @@ return [
             'attributes' => [
                 'property' => 'og:image',
             ],
+            'meta_tags' => [
+                [
+                    'property' => 'og:image:width',
+                    'content' => '@width',
+                ],
+                [
+                    'property' => 'og:image:height',
+                    'content' => '@height',
+                ],
+                [
+                    'property' => 'og:image:alt',
+                    'content' => '@alt',
+                ],
+                [
+                    'property' => 'og:image:type',
+                    'content' => '@mime_type',
+                ],
+            ],
         ],
     ],
 
@@ -247,7 +265,5 @@ Generating social media images is great, but doesn't do much good if we don't ou
 We can do that by adding the following Antlers snippet to your site's `<head></head>`:
 
 ```antlers
-{{ get_social_media_images }}
-<meta {{ attribute_string }} content="{{ url }}" />
-{{ /get_social_media_images }}
+{{ get_social_media_images /}}
 ```

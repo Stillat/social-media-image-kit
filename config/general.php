@@ -28,6 +28,7 @@ return [
     | you wish to update the social media images for the entry.
     |
     */
+
     'events_enabled' => true,
 
     /*

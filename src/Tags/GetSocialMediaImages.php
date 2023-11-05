@@ -50,7 +50,7 @@ class GetSocialMediaImages extends Tags
                 continue;
             }
 
-            $references[$imageRef] = $value[$this->fieldConfiguration->assetFieldName]->url();
+            $references[$imageRef] = $value[$this->fieldConfiguration->assetFieldName];
         }
 
         $results = [];
@@ -60,18 +60,42 @@ class GetSocialMediaImages extends Tags
                 continue;
             }
 
+            $asset = $references[$profile['handle']];
+            $imageContext = array_merge($asset->toArray(), $this->context->all());
+
             $attributes = Arr::get($profile, 'attributes', []);
-            $attributeString = $this->createAttributeString($attributes);
+            $attributeString = $this->createAttributeString($attributes, $imageContext);
+
+            $additionalMetaTags = '';
+
+            if (array_key_exists('meta_tags', $profile) && is_array($profile['meta_tags'])) {
+                $tags = $profile['meta_tags'];
+
+                foreach ($tags as $metaTag) {
+                    $additionalMetaTags .= '<meta '.$this->createAttributeString($metaTag, $imageContext).' />';
+                }
+            }
+
+            $assetUrl = $asset->url();
+
+            $baseMeta = '<meta '.$attributeString.' content="'.$assetUrl.'" />';
+            $baseMeta .= $additionalMetaTags;
 
             $results[] = [
-                'url' => $references[$profile['handle']],
+                'url' => $assetUrl,
                 'handle' => $profile['handle'],
                 'name' => $profile['name'],
                 'attributes' => $attributes,
                 'attribute_string' => $attributeString,
+                'meta_tags' => $additionalMetaTags,
+                'value' => $baseMeta,
             ];
         }
 
-        return $results;
+        if ($this->isPair) {
+            return $results;
+        }
+
+        return collect($results)->pluck('value')->implode("\n");
     }
 }

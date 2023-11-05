@@ -39,6 +39,24 @@ return [
             'attributes' => [
                 'property' => 'og:image',
             ],
+            'meta_tags' => [
+                [
+                    'property' => 'og:image:width',
+                    'content' => '@width',
+                ],
+                [
+                    'property' => 'og:image:height',
+                    'content' => '@height',
+                ],
+                [
+                    'property' => 'og:image:alt',
+                    'content' => '@alt',
+                ],
+                [
+                    'property' => 'og:image:type',
+                    'content' => '@mime_type',
+                ],
+            ],
         ],
     ],
 
