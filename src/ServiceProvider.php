@@ -49,15 +49,28 @@ class ServiceProvider extends AddonServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/generation.php', 'social_media_image_kit.generation');
         $this->mergeConfigFrom(__DIR__.'/../config/images.php', 'social_media_image_kit.images');
         $this->mergeConfigFrom(__DIR__.'/../config/queue.php', 'social_media_image_kit.queue');
+        $this->mergeConfigFrom(__DIR__.'/../config/fields.php', 'social_media_image_kit.fields');
 
         $this->registerImageGenerator();
 
-        $this->publishes([
+        $requiredConfigurationFiles = [
             __DIR__.'/../config/general.php' => config_path('social_media_image_kit/general.php'),
             __DIR__.'/../config/generation.php' => config_path('social_media_image_kit/generation.php'),
             __DIR__.'/../config/images.php' => config_path('social_media_image_kit/images.php'),
             __DIR__.'/../config/queue.php' => config_path('social_media_image_kit/queue.php'),
-        ], 'social-media-image-kit');
+        ];
+
+        // Ensure that the required configuration files exist. This reduces
+        // having an extra step in the installation/onboarding process.
+        foreach ($requiredConfigurationFiles as $addonVersion => $appVersion) {
+            if (! file_exists($appVersion)) {
+                @copy($addonVersion, $appVersion);
+            }
+        }
+
+        $this->publishes(array_merge($requiredConfigurationFiles, [
+            __DIR__.'/../config/fields.php' => config_path('social_media_image_kit/fields.php'),
+        ]), 'social-media-image-kit-config');
     }
 
     public function bootAddon()
@@ -91,10 +104,10 @@ class ServiceProvider extends AddonServiceProvider
         $this->app->singleton(GeneratorFieldConfiguration::class, function () {
             return new GeneratorFieldConfiguration(
                 assetContainer: config('social_media_image_kit.general.asset_container', 'social_media_images'),
-                imagesFieldName: config('social_media_image_kit.general.field_configuration.images_field', 'social_media_images'),
-                assetFieldName: config('social_media_image_kit.general.field_configuration.assets_field', 'asset_social_media_image'),
-                preservedFieldName: config('social_media_image_kit.general.field_configuration.preserve_field', 'preserve_image'),
-                socialMediaPlatformType: config('social_media_image_kit.general.field_configuration.social_media_type_field', 'social_media_image_type')
+                imagesFieldName: config('social_media_image_kit.fields.field_configuration.images_field', 'social_media_images'),
+                assetFieldName: config('social_media_image_kit.fields.field_configuration.assets_field', 'asset_social_media_image'),
+                preservedFieldName: config('social_media_image_kit.fields.field_configuration.preserve_field', 'preserve_image'),
+                socialMediaPlatformType: config('social_media_image_kit.fields.field_configuration.social_media_type_field', 'social_media_image_type')
             );
         });
 
