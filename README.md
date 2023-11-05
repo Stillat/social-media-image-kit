@@ -247,9 +247,7 @@ Generating social media images is great, but doesn't do much good if we don't ou
 We can do that by adding the following Antlers snippet to your site's `<head></head>`:
 
 ```antlers
-{{ get_social_media_images :images="social_media_images" }}
+{{ get_social_media_images }}
 <meta {{ attribute_string }} content="{{ url }}" />
 {{ /get_social_media_images }}
 ```
-
-Note to self: make it automatically find the `images` if we omit it so its a bit friendlier.

@@ -28,6 +28,10 @@ class GetSocialMediaImages extends Tags
     {
         $entryImages = $this->params->get('images', null);
 
+        if (! $entryImages && $this->context->has($this->fieldConfiguration->imagesFieldName)) {
+            $entryImages = $this->context[$this->fieldConfiguration->imagesFieldName];
+        }
+
         if (! $entryImages) {
             return [];
         }
