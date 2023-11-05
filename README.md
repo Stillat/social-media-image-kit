@@ -216,7 +216,7 @@ For instance, you could place something like this in your `AppServiceProvider` i
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Stillat\SocialMediaImageKit\SocialMediaImageKit;
+use Stillat\SocialMediaImageKit\Support\Facades\SocialMediaImageKit;
 
 class AppServiceProvider extends ServiceProvider
 {

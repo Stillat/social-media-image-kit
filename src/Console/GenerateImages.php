@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Event;
 use Statamic\Facades\Cascade;
 use Statamic\Facades\Entry;
 use Stillat\SocialMediaImageKit\Configuration;
+use Stillat\SocialMediaImageKit\Contracts\ImageGenerator;
 use Stillat\SocialMediaImageKit\Contracts\ProfileResolver;
 use Stillat\SocialMediaImageKit\Events\GeneratedImage;
-use Stillat\SocialMediaImageKit\ImageGenerator;
 
 use function Laravel\Prompts\progress;
 
@@ -21,12 +21,6 @@ class GenerateImages extends Command
 
     public function handle(ProfileResolver $resolver)
     {
-        if (! ImageGenerator::isDriverReachable()) {
-            $this->error('The configured HTML renderer is not available.');
-
-            return;
-        }
-
         $skipExisting = ! $this->option('regen');
         $sizes = $resolver->getSizes();
         $entries = Entry::whereInCollection(Configuration::collections())->all();
@@ -58,10 +52,9 @@ class GenerateImages extends Command
             $generator->setSkipExistingImages($skipExisting);
 
             $generator->generate(
-                $entry->id(),
+                $entry,
                 $collection,
                 $blueprint,
-                $entry,
                 array_merge($cascade, $entry->toArray())
             );
         }

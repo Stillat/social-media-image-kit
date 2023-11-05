@@ -12,4 +12,15 @@ class ConfigProfilerResolver implements ProfileResolver
     {
         return config($this->configKey, []);
     }
+
+    public function getSize($handle): ?array
+    {
+        foreach ($this->getSizes() as $profile) {
+            if ($profile['handle'] === $handle) {
+                return $profile;
+            }
+        }
+
+        return null;
+    }
 }

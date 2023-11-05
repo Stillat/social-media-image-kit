@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Stillat\SocialMediaImageKit\Configuration;
-use Stillat\SocialMediaImageKit\ImageGenerator;
+use Stillat\SocialMediaImageKit\Contracts\ImageGenerator;
 use Stillat\SocialMediaImageKit\Models\SocialMediaImageTasks;
 
 class GenerateSocialMediaImages implements ShouldQueue

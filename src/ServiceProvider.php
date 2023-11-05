@@ -6,10 +6,13 @@ use Illuminate\Support\Str;
 use Statamic\Events\EntryCreated;
 use Statamic\Events\EntrySaved;
 use Statamic\Providers\AddonServiceProvider;
+use Stillat\SocialMediaImageKit\Contracts\HtmlRenderer;
+use Stillat\SocialMediaImageKit\Contracts\ImageGenerator as ImageGeneratorContract;
 use Stillat\SocialMediaImageKit\Contracts\ImageNameFormatter;
 use Stillat\SocialMediaImageKit\Contracts\ProfileResolver;
 use Stillat\SocialMediaImageKit\Fieldtypes\SocialMediaImageType;
 use Stillat\SocialMediaImageKit\Rendering\BrowsershotFactory;
+use Stillat\SocialMediaImageKit\Rendering\BrowsershotRenderer;
 
 class ServiceProvider extends AddonServiceProvider
 {
@@ -98,7 +101,10 @@ class ServiceProvider extends AddonServiceProvider
             // Not the prettiest default, but it will do.
             file_put_contents($defaultAntlers, '{{ title }}');
         }
+    }
 
+    protected function registerImageGenerator(): void
+    {
         $this->app->bind(ImageNameFormatter::class, GeneratedImageNameFormatter::class);
 
         $this->app->singleton(GeneratorFieldConfiguration::class, function () {
@@ -114,37 +120,22 @@ class ServiceProvider extends AddonServiceProvider
         $this->app->singleton(ProfileResolver::class, function () {
             return new ConfigProfilerResolver();
         });
-    }
 
-    protected function registerImageGenerator(): void
-    {
         $this->app->singleton(BrowsershotFactory::class, function () {
             return new BrowsershotFactory();
         });
 
-        $this->app->bind(ImageGenerator::class, function () {
-            $htmlRenderer = app(Configuration::htmlRenderer());
-            $profileResolver = app(ProfileResolver::class);
-            $fieldConfiguration = app(GeneratorFieldConfiguration::class);
-            $nameFormatter = app(ImageNameFormatter::class);
-            $templatePath = config('social_media_image_kit.generation.template_path', resource_path('views/social-media-image-kit'));
+        $this->app->bind(HtmlRenderer::class, config('social_media_image_kit.generation.html_renderer', BrowsershotRenderer::class));
+        $this->app->bind(ImageGeneratorContract::class, config('social_media_image_kit.generation.generator', ImageGenerator::class));
 
-            $generator = new ImageGenerator(
-                $htmlRenderer,
-                $profileResolver,
-                $fieldConfiguration,
-                $nameFormatter,
-                $templatePath
-            );
-
+        $this->app->afterResolving(ImageGeneratorContract::class, function (ImageGeneratorContract $generator) {
             $generator->setImageExtension(
                 config('social_media_image_kit.generation.image_format.extension', 'png')
             );
 
             $generator->setCleanupFiles(config('social_media_image_kit.generation.cleanup_files', true));
-            $generator->setTmpDirectory(config('social_media_image_kit.generation.tmp_path', storage_path('social-media-image-kit')));
-
-            return $generator;
+            $generator->setTmpDirectory(config('social_media_image_kit.generation.tmp_path', storage_path('app/social-media-image-kit')));
+            $generator->setTemplatePath(config('social_media_image_kit.generation.template_path', resource_path('views/social-media-image-kit')));
         });
     }
 }

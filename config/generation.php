@@ -18,6 +18,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Image Generator
+    |--------------------------------------------------------------------------
+    |
+    | Image generators are responsible for creating the social media images
+    | using the configured HTML renderer, managing created images, and
+    | keeping your entry's assets up-to-date. You may customize the
+    | generator implementation used by the Social Media Image Kit.
+    |
+    */
+
+    'generator' => \Stillat\SocialMediaImageKit\ImageGenerator::class,
+
+    /*
+    |--------------------------------------------------------------------------
     | Temporary Path for Image Processing
     |--------------------------------------------------------------------------
     |
