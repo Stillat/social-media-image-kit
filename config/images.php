@@ -27,8 +27,18 @@ return [
             'name' => 'Twitter',
             'width' => 1024,
             'height' => 512,
-            'attributes' => [
-                'name' => 'og:image',
+            'meta' => [
+                [
+                    'name' => 'twitter:image',
+                    'content' => '$url',
+                ],
+                [
+                    'name' => 'twitter:image:alt',
+                    'content' => [
+                        'value' => '$alt',
+                        'reject_empty' => true,
+                    ],
+                ],
             ],
         ],
         [
@@ -36,25 +46,29 @@ return [
             'name' => 'Facebook',
             'width' => 1200,
             'height' => 630,
-            'attributes' => [
-                'property' => 'og:image',
-            ],
-            'meta_tags' => [
+            'meta' => [
+                [
+                    'property' => 'og:image',
+                    'content' => '$url',
+                ],
                 [
                     'property' => 'og:image:width',
-                    'content' => '@width',
+                    'content' => '$width',
                 ],
                 [
                     'property' => 'og:image:height',
-                    'content' => '@height',
+                    'content' => '$height',
                 ],
                 [
                     'property' => 'og:image:alt',
-                    'content' => '@alt',
+                    'content' => [
+                        'value' => '$alt',
+                        'reject_empty' => true,
+                    ],
                 ],
                 [
                     'property' => 'og:image:type',
-                    'content' => '@mime_type',
+                    'content' => '$mime_type',
                 ],
             ],
         ],
