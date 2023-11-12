@@ -5,6 +5,7 @@ namespace Stillat\SocialMediaImageKit;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Statamic\Contracts\Entries\Entry;
+use Statamic\Facades\Asset;
 use Stillat\SocialMediaImageKit\Contracts\ImageGenerator as ImageGeneratorContract;
 use Stillat\SocialMediaImageKit\Events\GeneratedImage;
 use Stillat\SocialMediaImageKit\Events\GeneratingImage;
@@ -27,6 +28,14 @@ class ImageGenerator extends AbstractImageGenerator implements ImageGeneratorCon
         $existingImages = collect($entry->get($this->fieldConfiguration->imagesFieldName) ?? [])
             ->keyBy($this->fieldConfiguration->assetFieldName)
             ->all();
+
+        $incomingHandles = collect($this->sizes)->map(fn ($size) => $size['handle'])->all();
+
+        $imagesToCleanUp = collect($existingImages)->where(function ($image) use ($incomingHandles) {
+            return ! in_array($image[$this->fieldConfiguration->socialMediaPlatformType], $incomingHandles) &&
+                (! array_key_exists($this->fieldConfiguration->preservedFieldName, $image) ||
+                    $image[$this->fieldConfiguration->preservedFieldName] !== true);
+        })->values()->all();
 
         $filesToPreserve = collect($existingImages)->filter(function ($image) {
             return Arr::get($image, $this->fieldConfiguration->preservedFieldName, false) === true;
@@ -100,6 +109,16 @@ class ImageGenerator extends AbstractImageGenerator implements ImageGeneratorCon
             GeneratedImage::dispatch($entry, $size, true);
 
             $changesMade++;
+        }
+
+        if (count($imagesToCleanUp) > 0) {
+            foreach ($imagesToCleanUp as $image) {
+                $assetId = $this->fieldConfiguration->assetContainer.'::'.$image[$this->fieldConfiguration->assetFieldName];
+                $asset = Asset::find($assetId);
+
+                $asset?->delete();
+                $changesMade++;
+            }
         }
 
         if ($changesMade == 0) {
