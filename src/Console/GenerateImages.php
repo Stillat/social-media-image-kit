@@ -55,7 +55,7 @@ class GenerateImages extends Command
                 $entry,
                 $collection,
                 $blueprint,
-                array_merge($cascade, $entry->toArray())
+                array_merge($cascade, $entry->toAugmentedArray())
             );
         }
 
