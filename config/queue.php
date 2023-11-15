@@ -46,4 +46,20 @@ return [
         'name' => 'default',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Auto-Generation of Images on Events
+    |--------------------------------------------------------------------------
+    |
+    | The events_enabled option determines if images should be auto-generated
+    | by the addon when entries are saved or created. Set to true to enable
+    | automatic creation upon these events. When disabled, you will need
+    | to manually generate images using the provided Artisan commands
+    | or some other process if data within the entry has changed and
+    | you wish to update the social media images for the entry.
+    |
+    */
+
+    'events_enabled' => true,
+
 ];

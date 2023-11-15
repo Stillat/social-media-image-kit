@@ -16,7 +16,7 @@ class Configuration
 
     public static function areEventsEnabled(): bool
     {
-        return config('social_media_image_kit.general.events_enabled', true);
+        return config('social_media_image_kit.queue.events_enabled', true);
     }
 
     public static function assetContainer(): string
