@@ -22,7 +22,7 @@ php artisan vendor:publish --tag=social-media-image-kit
 
 This command will publish the required public assets as well as a handful of configuration files.
 
-If you intend to use the provided Browershot, you will also need to ensure that Puppeteer is installed and configured on your system. For more information on how to do this, please consult the Browsershot documentation at https://spatie.be/docs/browsershot/v2/requirements
+If you intend to use the provided Browsershot, you will also need to ensure that Puppeteer is installed and configured on your system. For more information on how to do this, please consult the Browsershot documentation at https://spatie.be/docs/browsershot/v2/requirements
 
 The following documentation will include screenshots taken from a new [Multisimplicity](https://statamic.com/starter-kits/statamic/multisimplicity) starter kit installation. Its a pretty neat starter kit - you should check it out!
 
@@ -127,7 +127,7 @@ If installation and configuration was a success, we should see a progress bar in
 
 ![Progress bar showing generation progress](.art/doc/generating_images.png)
 
-If you receive a `Symfony\Component\Process\Exception\ProcessFailedException` and the error message mentions Puppeteer you may have skipped part of the installation process. If you intend to use the provided Browershot, you will also need to ensure that Puppeteer is installed and configured on your system. For more information on how to do this, please consult the Browsershot documentation at https://spatie.be/docs/browsershot/v2/requirements.
+If you receive a `Symfony\Component\Process\Exception\ProcessFailedException` and the error message mentions Puppeteer you may have skipped part of the installation process. If you intend to use the provided Browsershot, you will also need to ensure that Puppeteer is installed and configured on your system. For more information on how to do this, please consult the Browsershot documentation at https://spatie.be/docs/browsershot/v2/requirements.
 
 ### Step 5: View the Control Panel
 
@@ -222,7 +222,7 @@ When creating templates, be sure to keep the following considerations in mind:
 * When running your site using commands like `php artisan serve` and your template makes use of images or other assets, be sure this is still running when you generate social media images
 
 
-## Configuring the Browershot Instance
+## Configuring the Browsershot Instance
 
 Not all systems are created equal, and sometimes you may need to modify the Browsershot settings. To modify the settings, you can use the `Stillat\SocialMediaImageKit\SocialMediaImageKit` helper class.
 
