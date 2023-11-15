@@ -224,7 +224,7 @@ When creating templates, be sure to keep the following considerations in mind:
 
 ## Configuring the Browershot Instance
 
-Not all systems are created equal, and sometimes you may need to modify the Browershot settings. To modify the settings, you can use the `Stillat\SocialMediaImageKit\SocialMediaImageKit` helper class.
+Not all systems are created equal, and sometimes you may need to modify the Browsershot settings. To modify the settings, you can use the `Stillat\SocialMediaImageKit\SocialMediaImageKit` helper class.
 
 For instance, you could place something like this in your `AppServiceProvider` if running on Windows:
 
