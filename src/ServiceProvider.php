@@ -86,8 +86,8 @@ class ServiceProvider extends AddonServiceProvider
         }
 
         // Create a default template, if it doesn't exist.
-        $defaultAntlers = Str::finish(config('social_media_image_kit.generation.template_path'), '/').'default.antlers.html';
-        $defaultBlade = Str::finish(config('social_media_image_kit.generation.template_path'), '/').'default.blade.php';
+        $defaultAntlers = Str::finish(config('social_media_image_kit.generation.template_path'), '/').'_default.antlers.html';
+        $defaultBlade = Str::finish(config('social_media_image_kit.generation.template_path'), '/').'_default.blade.php';
 
         // Check if either default template option exists. We only want to
         // create one if neither exist, so we don't become a nuisance.
