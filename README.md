@@ -110,7 +110,7 @@ return [
 By default, Social Media Image Kit will create a new file within your views directory:
 
 ```
-resources/views/social-media-image-kit/default.antlers.html
+resources/views/social-media-image-kit/_default.antlers.html
 ```
 
 This template will be used when generating the images for each of your site's entries. Feel free to modify this however you'd like to meet your site's overall look and feel 🙂

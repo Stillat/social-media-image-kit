@@ -10,7 +10,7 @@
         "php": "^8.0",
         "statamic/cms": "^4",
         "spatie/browsershot": "^3",
-        "stillat/statamic-template-resolver": "^1.0",
+        "stillat/statamic-template-resolver": "^1.0.1",
         "stillat/statamic-attribute-renderer": "^1"
     },
     "extra": {
