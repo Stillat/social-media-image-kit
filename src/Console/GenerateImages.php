@@ -11,6 +11,7 @@ use Stillat\SocialMediaImageKit\Contracts\ImageGenerator;
 use Stillat\SocialMediaImageKit\Contracts\ProfileResolver;
 use Stillat\SocialMediaImageKit\Events\GeneratedImage;
 
+use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\progress;
 
 class GenerateImages extends Command
@@ -23,7 +24,27 @@ class GenerateImages extends Command
     {
         $skipExisting = ! $this->option('regen');
         $sizes = $resolver->getSizes();
-        $entries = Entry::whereInCollection(Configuration::collections())->all();
+
+        $collectionsToGenerate = Configuration::collections();
+
+        if (! $skipExisting)
+        {
+            $selected = multiselect(
+                label: 'Select collections to generate images for:',
+                options: $collectionsToGenerate,
+                default: $collectionsToGenerate
+            );
+
+            if (count($selected) === 0) {
+                $this->info('No collections selected. Exiting.');
+
+                return;
+            }
+
+            $collectionsToGenerate = $selected;
+        }
+
+        $entries = Entry::whereInCollection($collectionsToGenerate)->all();
         $cascade = Cascade::instance()->hydrate()->toArray();
 
         $progress = progress(
