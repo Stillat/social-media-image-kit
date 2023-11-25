@@ -15,6 +15,7 @@ class ImageGenerator extends AbstractImageGenerator implements ImageGeneratorCon
 {
     public function generate(Entry $entry, string $collection, string $blueprint, array $data): void
     {
+        $assetFolder = $this->folderNameFormatter->getFolderName($entry);
         $entryId = $entry->id();
 
         $html = $this->templateManager->render($collection, $blueprint, $data);
@@ -80,6 +81,16 @@ class ImageGenerator extends AbstractImageGenerator implements ImageGeneratorCon
                 GenerationFailed::dispatch($entry, $size);
 
                 continue;
+            }
+
+            if (mb_strlen(trim($assetFolder)) > 0 && $assetFolder != '/') {
+                $assetFolder = Str::finish($assetFolder, '/');
+
+                if (Str::startsWith($assetPath, '/')) {
+                    $assetPath = Str::substr($assetPath, 1);
+                }
+
+                $assetPath = $assetFolder.$assetPath;
             }
 
             $assetId = $this->fieldConfiguration->assetContainer.'::'.$assetPath;

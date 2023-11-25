@@ -55,7 +55,13 @@ class AssetUpdater
             $extension = pathinfo($fileName, PATHINFO_EXTENSION);
             $mimeType = MimeType::fromExtension($extension);
 
-            $asset = Asset::make()->container($info->assetContainer)->path($info->assetId);
+            $assetFilename = $info->assetId;
+
+            if (Str::contains($assetFilename, '::')) {
+                $assetFilename = Str::after($assetFilename, '::');
+            }
+
+            $asset = Asset::make()->container($info->assetContainer)->path($assetFilename);
             $asset->save();
 
             $asset->upload(new UploadedFile($imagePath, $fileName, $mimeType));

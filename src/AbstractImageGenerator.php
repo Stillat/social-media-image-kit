@@ -4,6 +4,7 @@ namespace Stillat\SocialMediaImageKit;
 
 use Statamic\Facades\Cascade;
 use Statamic\Facades\Entry as EntryApi;
+use Stillat\SocialMediaImageKit\Contracts\FolderNameFormatter;
 use Stillat\SocialMediaImageKit\Contracts\HtmlRenderer;
 use Stillat\SocialMediaImageKit\Contracts\ImageGenerator as ImageGeneratorContract;
 use Stillat\SocialMediaImageKit\Contracts\ImageNameFormatter;
@@ -34,16 +35,20 @@ abstract class AbstractImageGenerator implements ImageGeneratorContract
 
     protected string $tmpPath = '';
 
+    protected FolderNameFormatter $folderNameFormatter;
+
     public function __construct(
         HtmlRenderer $renderer,
         ProfileResolver $profileResolver,
         GeneratorFieldConfiguration $config,
         ImageNameFormatter $nameFormatter,
+        FolderNameFormatter $folderNameFormatter,
     ) {
         $this->nameFormatter = $nameFormatter;
         $this->fieldConfiguration = $config;
         $this->htmlRenderer = $renderer;
         $this->profileResolver = $profileResolver;
+        $this->folderNameFormatter = $folderNameFormatter;
 
         $this->withDefaultSizes();
     }

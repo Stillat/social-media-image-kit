@@ -13,6 +13,9 @@
         "stillat/statamic-template-resolver": "^1.0.1",
         "stillat/statamic-attribute-renderer": "^1"
     },
+    "require-dev": {
+        "laravel/pint": "^1.13"
+    },
     "extra": {
         "statamic": {
             "name": "Social Media Image Kit",

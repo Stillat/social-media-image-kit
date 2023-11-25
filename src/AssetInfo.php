@@ -8,7 +8,7 @@ class AssetInfo
         public string $assetId,
         public string $imagePath,
         public string $assetContainer,
-        public ?string $fileName,
+        public ?string $fileName
     ) {
     }
 }

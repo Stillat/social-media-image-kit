@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Statamic\Events\EntryCreated;
 use Statamic\Events\EntrySaved;
 use Statamic\Providers\AddonServiceProvider;
+use Stillat\SocialMediaImageKit\Contracts\FolderNameFormatter;
 use Stillat\SocialMediaImageKit\Contracts\HtmlRenderer;
 use Stillat\SocialMediaImageKit\Contracts\ImageGenerator as ImageGeneratorContract;
 use Stillat\SocialMediaImageKit\Contracts\ImageNameFormatter;
@@ -106,6 +107,7 @@ class ServiceProvider extends AddonServiceProvider
     protected function registerImageGenerator(): void
     {
         $this->app->bind(ImageNameFormatter::class, GeneratedImageNameFormatter::class);
+        $this->app->bind(FolderNameFormatter::class, AntlersFolderNameFormatter::class);
 
         $this->app->singleton(GeneratorFieldConfiguration::class, function () {
             return new GeneratorFieldConfiguration(

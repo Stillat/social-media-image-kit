@@ -28,6 +28,8 @@ return [
 
     'asset_container' => 'social_media_images',
 
+    'folder' => '',
+
     /*
     |--------------------------------------------------------------------------
     | Collection Handles for Image Generation
