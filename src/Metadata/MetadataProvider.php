@@ -2,6 +2,9 @@
 
 namespace Stillat\SocialMediaImageKit\Metadata;
 
+use Exception;
+use Illuminate\Support\Facades\Log;
+use Statamic\Facades\Asset as AssetApi;
 use Statamic\Fields\Value;
 use Statamic\Fields\Values;
 use Stillat\SocialMediaImageKit\Contracts\ProfileResolver;
@@ -77,6 +80,39 @@ class MetadataProvider
             }
 
             $asset = $references[$profile['handle']];
+
+            if (is_string($asset)) {
+                // Attempt to find the collection.
+                $collection = $context['collection'] ?? null;
+
+                if ($collection instanceof Value) {
+                    $collection = $collection->value();
+                }
+
+                $collectionHandle = '';
+
+                if ($collection) {
+                    $collectionHandle = $collection->handle();
+                }
+
+                $checkId = $this->fieldConfiguration->assetContainer.'::'.$asset;
+                $asset = AssetApi::find($checkId);
+
+                $message = 'Unable to find asset with ID: '.$checkId;
+
+                if ($collectionHandle) {
+                    $message .= ' in collection: '.$collectionHandle;
+                }
+
+                $message .= '. The collection is likely missing the Social Media Image Kit fieldset.';
+
+                if (! $asset) {
+                    throw new Exception($message);
+                } else {
+                    Log::info($message);
+                }
+            }
+
             $imageContext = array_merge($context, $asset->toArray());
 
             $metaValues = [];
