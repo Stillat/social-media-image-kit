@@ -85,6 +85,7 @@ class MetadataProvider
             if (array_key_exists('meta', $profile) && is_array($profile['meta'])) {
                 $metaValues = $profile['meta'];
 
+                $imageContext['url'] = $asset->absoluteUrl();
                 $metaTags = implode("\n", $this->createMetaTags($metaValues, $imageContext));
             }
 
