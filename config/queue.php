@@ -60,6 +60,6 @@ return [
     |
     */
 
-    'events_enabled' => true,
+    'events_enabled' => false,
 
 ];
