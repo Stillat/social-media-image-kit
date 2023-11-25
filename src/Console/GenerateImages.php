@@ -27,8 +27,8 @@ class GenerateImages extends Command
 
         $collectionsToGenerate = Configuration::collections();
 
-        if (! $skipExisting)
-        {
+        if (! $skipExisting) {
+
             $selected = multiselect(
                 label: 'Select collections to generate images for:',
                 options: $collectionsToGenerate,
