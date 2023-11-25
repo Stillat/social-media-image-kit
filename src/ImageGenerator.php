@@ -82,6 +82,11 @@ class ImageGenerator extends AbstractImageGenerator implements ImageGeneratorCon
             }
 
             $path = $this->tmpPath.'/'.$assetPath;
+            $pathDir = dirname($path);
+
+            if (! file_exists($pathDir)) {
+                mkdir($pathDir, 0755, true);
+            }
 
             $imageDetails = new ImageDetails();
             $imageDetails->width = $size['width'];
