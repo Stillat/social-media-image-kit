@@ -4,11 +4,10 @@ namespace Stillat\SocialMediaImageKit\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Event;
-use Statamic\Facades\Cascade;
 use Statamic\Facades\Entry;
 use Stillat\SocialMediaImageKit\Configuration;
-use Stillat\SocialMediaImageKit\Contracts\ImageGenerator;
 use Stillat\SocialMediaImageKit\Contracts\ProfileResolver;
+use Stillat\SocialMediaImageKit\EntryGenerator;
 use Stillat\SocialMediaImageKit\Events\GeneratedImage;
 
 use function Laravel\Prompts\multiselect;
@@ -20,10 +19,12 @@ class GenerateImages extends Command
 
     protected $description = 'Generates social media images.';
 
-    public function handle(ProfileResolver $resolver)
+    public function handle(ProfileResolver $resolver, EntryGenerator $entryGenerator)
     {
         $skipExisting = ! $this->option('regen');
         $sizes = $resolver->getSizes();
+        $entryGenerator->setSize($sizes);
+        $entryGenerator->setSkipExisting($skipExisting);
 
         $collectionsToGenerate = Configuration::collections();
 
@@ -45,7 +46,6 @@ class GenerateImages extends Command
         }
 
         $entries = Entry::whereInCollection($collectionsToGenerate)->all();
-        $cascade = Cascade::instance()->hydrate()->toArray();
 
         $progress = progress(
             label: 'Preparing to generate images...',
@@ -64,21 +64,7 @@ class GenerateImages extends Command
             )->advance();
         });
 
-        foreach ($entries as $entry) {
-            $blueprint = $entry->blueprint()->handle();
-            $collection = $entry->collection()->handle();
-
-            /** @var ImageGenerator $generator */
-            $generator = app(ImageGenerator::class);
-            $generator->setSkipExistingImages($skipExisting);
-
-            $generator->generate(
-                $entry,
-                $collection,
-                $blueprint,
-                array_merge($cascade, $entry->toAugmentedArray())
-            );
-        }
+        $entryGenerator->generate($entries);
 
         $progress->finish();
     }
