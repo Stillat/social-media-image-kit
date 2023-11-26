@@ -15,7 +15,7 @@ use function Laravel\Prompts\progress;
 
 class GenerateImages extends Command
 {
-    protected $signature = 'social-media-image-kit:generate-images {--regen}';
+    protected $signature = 'social-media-image-kit:generate-images {--regen : Regenerate existing images.}';
 
     protected $description = 'Generates social media images.';
 
