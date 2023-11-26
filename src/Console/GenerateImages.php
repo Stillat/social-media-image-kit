@@ -4,6 +4,7 @@ namespace Stillat\SocialMediaImageKit\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Event;
+use Statamic\Facades\Collection as CollectionApi;
 use Statamic\Facades\Entry;
 use Stillat\SocialMediaImageKit\Configuration;
 use Stillat\SocialMediaImageKit\Contracts\ProfileResolver;
@@ -33,21 +34,26 @@ class GenerateImages extends Command
             $entries = [Entry::find($singleEntry)];
         } else {
             $collectionsToGenerate = Configuration::collections();
+            $collections = collect(CollectionApi::all())->sortBy('title')->all();
 
-            if (! $skipExisting) {
+            $options = ['*' => 'All collections'];
 
-                $selected = multiselect(
-                    label: 'Select collections to generate images for:',
-                    options: $collectionsToGenerate,
-                    default: $collectionsToGenerate
-                );
+            foreach ($collections as $collection) {
+                $options[$collection->handle()] = $collection->title();
+            }
 
-                if (count($selected) === 0) {
-                    $this->info('No collections selected. Exiting.');
+            $selected = multiselect(
+                label: 'Select collections to generate images for:',
+                options: $options,
+            );
 
-                    return;
-                }
+            if (count($selected) === 0) {
+                $this->info('No collections selected. Exiting.');
 
+                return;
+            }
+
+            if (! in_array('*', $selected)) {
                 $collectionsToGenerate = $selected;
             }
 
