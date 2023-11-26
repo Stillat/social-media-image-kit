@@ -15,7 +15,7 @@ use function Laravel\Prompts\progress;
 
 class GenerateImages extends Command
 {
-    protected $signature = 'social-media-image-kit:generate-images {--regen : Regenerate existing images.}';
+    protected $signature = 'social-media-image-kit:generate-images {entry?} {--regen : Regenerate existing images.}';
 
     protected $description = 'Generates social media images.';
 
@@ -26,26 +26,33 @@ class GenerateImages extends Command
         $entryGenerator->setSize($sizes);
         $entryGenerator->setSkipExisting($skipExisting);
 
-        $collectionsToGenerate = Configuration::collections();
+        $singleEntry = $this->argument('entry');
+        $entries = [];
 
-        if (! $skipExisting) {
+        if ($singleEntry !== null) {
+            $entries = [Entry::find($singleEntry)];
+        } else {
+            $collectionsToGenerate = Configuration::collections();
 
-            $selected = multiselect(
-                label: 'Select collections to generate images for:',
-                options: $collectionsToGenerate,
-                default: $collectionsToGenerate
-            );
+            if (! $skipExisting) {
 
-            if (count($selected) === 0) {
-                $this->info('No collections selected. Exiting.');
+                $selected = multiselect(
+                    label: 'Select collections to generate images for:',
+                    options: $collectionsToGenerate,
+                    default: $collectionsToGenerate
+                );
 
-                return;
+                if (count($selected) === 0) {
+                    $this->info('No collections selected. Exiting.');
+
+                    return;
+                }
+
+                $collectionsToGenerate = $selected;
             }
 
-            $collectionsToGenerate = $selected;
+            $entries = Entry::whereInCollection($collectionsToGenerate)->all();
         }
-
-        $entries = Entry::whereInCollection($collectionsToGenerate)->all();
 
         $progress = progress(
             label: 'Preparing to generate images...',
