@@ -28,7 +28,27 @@ return [
 
     'asset_container' => 'social_media_images',
 
-    'folder' => '',
+    /*
+    |--------------------------------------------------------------------------
+    | Folder Template
+    |--------------------------------------------------------------------------
+    |
+    | This option defines the template that is used to generate the folder
+    | path for each image. The template is rendered using the Antlers
+    | template engine. You should not change this setting after you
+    | have generated images for your entries. Nested folders are
+    | encouraged to help improve the Control Panel experience.
+    |
+    */
+
+    'folder' => <<<'EOT'
+{{ if date }}
+   social-media/{{ date | format('Y') }}/{{ date | format ('m') }}/{{ date | format ('d') }}
+{{ else }}
+   social-media/{{ collection:handle /}}
+{{ /if }}
+EOT
+    ,
 
     /*
     |--------------------------------------------------------------------------
