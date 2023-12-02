@@ -16,7 +16,7 @@ use function Laravel\Prompts\progress;
 
 class GenerateImages extends Command
 {
-    protected $signature = 'social-media-image-kit:generate-images {entry?} {--regen : Regenerate existing images.}';
+    protected $signature = 'social-media-image-kit:generate-images {entry?} {--regen : Regenerate existing images.} {--collection=-1 : The collections to generate images for.}';
 
     protected $description = 'Generates social media images.';
 
@@ -26,38 +26,54 @@ class GenerateImages extends Command
         $sizes = $resolver->getSizes();
         $entryGenerator->setSize($sizes);
         $entryGenerator->setSkipExisting($skipExisting);
-
-        $singleEntry = $this->argument('entry');
         $entries = [];
 
-        if ($singleEntry !== null) {
-            $entries = [Entry::find($singleEntry)];
+        $collection = $this->option('collection');
+
+        if ($collection === '-1') {
+            $singleEntry = $this->argument('entry');
+
+            if ($singleEntry !== null) {
+                $entries = [Entry::find($singleEntry)];
+            } else {
+                $collectionsToGenerate = Configuration::collections();
+                $collections = collect(CollectionApi::all())->sortBy('title')->all();
+
+                $options = ['*' => 'All collections'];
+
+                foreach ($collections as $collection) {
+                    $options[$collection->handle()] = $collection->title();
+                }
+
+                $selected = multiselect(
+                    label: 'Select collections to generate images for:',
+                    options: $options,
+                );
+
+                if (count($selected) === 0) {
+                    $this->info('No collections selected. Exiting.');
+
+                    return;
+                }
+
+                if (! in_array('*', $selected)) {
+                    $collectionsToGenerate = $selected;
+                }
+
+                $entries = Entry::whereInCollection($collectionsToGenerate)->all();
+            }
         } else {
-            $collectionsToGenerate = Configuration::collections();
-            $collections = collect(CollectionApi::all())->sortBy('title')->all();
-
-            $options = ['*' => 'All collections'];
-
-            foreach ($collections as $collection) {
-                $options[$collection->handle()] = $collection->title();
+            if ($collection == '*') {
+                $entries = Entry::all()->all();
+            } else {
+                $entries = Entry::whereCollection($collection)->all();
             }
+        }
 
-            $selected = multiselect(
-                label: 'Select collections to generate images for:',
-                options: $options,
-            );
+        if (count($entries) === 0) {
+            $this->info('No entries found. Exiting.');
 
-            if (count($selected) === 0) {
-                $this->info('No collections selected. Exiting.');
-
-                return;
-            }
-
-            if (! in_array('*', $selected)) {
-                $collectionsToGenerate = $selected;
-            }
-
-            $entries = Entry::whereInCollection($collectionsToGenerate)->all();
+            return;
         }
 
         $progress = progress(
