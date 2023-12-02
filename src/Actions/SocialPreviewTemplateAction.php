@@ -13,7 +13,7 @@ class SocialPreviewTemplateAction extends Action
 
     public static function title()
     {
-        return 'Social Preview Template';
+        return 'Preview Social Media Template';
     }
 
     public function redirect($items, $values)
