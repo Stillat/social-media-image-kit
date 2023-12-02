@@ -13,7 +13,21 @@ return [
     | is useful for disabling image generation in some environments.
     |
     */
+
     'enabled' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Preview Enabled
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, the Social Media Image Kit will add a preview action button
+    | to eligible entries in the Control Panel. This button will allow you to
+    | preview the social media image for an entry for development purposes.
+    |
+    */
+
+    'preview_enabled' => true,
 
     /*
     |--------------------------------------------------------------------------

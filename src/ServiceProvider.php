@@ -2,10 +2,12 @@
 
 namespace Stillat\SocialMediaImageKit;
 
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use Statamic\Events\EntryCreated;
 use Statamic\Events\EntrySaved;
 use Statamic\Providers\AddonServiceProvider;
+use Stillat\SocialMediaImageKit\Actions\SocialPreviewTemplateAction;
 use Stillat\SocialMediaImageKit\Contracts\FolderNameFormatter;
 use Stillat\SocialMediaImageKit\Contracts\HtmlRenderer;
 use Stillat\SocialMediaImageKit\Contracts\ImageGenerator as ImageGeneratorContract;
@@ -45,6 +47,10 @@ class ServiceProvider extends AddonServiceProvider
         EntrySaved::class => [
             Listeners\EntrySavedListener::class,
         ],
+    ];
+
+    protected $routes = [
+        'cp' => __DIR__.'/../routes/cp.php',
     ];
 
     public function register()
@@ -101,6 +107,16 @@ class ServiceProvider extends AddonServiceProvider
 
             // Not the prettiest default, but it will do.
             file_put_contents($defaultAntlers, '{{ title }}');
+        }
+
+        $this->bootImagePreviewer();
+    }
+
+    protected function bootImagePreviewer()
+    {
+        if (config('social_media_image_kit.general.preview_enabled', false)) {
+            View::addNamespace('social-media-image-kit', __DIR__.'/../resources/views');
+            SocialPreviewTemplateAction::register();
         }
     }
 
