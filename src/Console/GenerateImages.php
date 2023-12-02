@@ -66,7 +66,8 @@ class GenerateImages extends Command
             if ($collection == '*') {
                 $entries = Entry::all()->all();
             } else {
-                $entries = Entry::whereCollection($collection)->all();
+                $collectionsToGenerate = array_map('trim', explode(',', $collection));
+                $entries = Entry::whereCollection($collectionsToGenerate)->all();
             }
         }
 
