@@ -42,6 +42,10 @@ class GenerateImages extends Command
                 $options = ['*' => 'All collections'];
 
                 foreach ($collections as $collection) {
+                    if (! in_array($collection->handle(), $collectionsToGenerate)) {
+                        continue;
+                    }
+
                     $options[$collection->handle()] = $collection->title();
                 }
 
@@ -64,10 +68,10 @@ class GenerateImages extends Command
             }
         } else {
             if ($collection == '*') {
-                $entries = Entry::all()->all();
+                $entries = Entry::whereInCollection(Configuration::collections())->all();
             } else {
                 $collectionsToGenerate = array_map('trim', explode(',', $collection));
-                $entries = Entry::whereCollection($collectionsToGenerate)->all();
+                $entries = Entry::whereInCollection($collectionsToGenerate)->all();
             }
         }
 
