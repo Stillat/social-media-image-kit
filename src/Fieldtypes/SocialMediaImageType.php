@@ -7,7 +7,7 @@ use Stillat\SocialMediaImageKit\Contracts\ProfileResolver;
 
 class SocialMediaImageType extends Select
 {
-    public function preload()
+    public function preload(): array
     {
         $options = [];
 
