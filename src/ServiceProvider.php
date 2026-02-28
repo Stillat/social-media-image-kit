@@ -8,6 +8,7 @@ use Statamic\Events\EntryCreated;
 use Statamic\Events\EntrySaved;
 use Statamic\Providers\AddonServiceProvider;
 use Stillat\SocialMediaImageKit\Actions\SocialPreviewTemplateAction;
+use Stillat\SocialMediaImageKit\Actions\RecreateSocialMediaImages;
 use Stillat\SocialMediaImageKit\Contracts\FolderNameFormatter;
 use Stillat\SocialMediaImageKit\Contracts\HtmlRenderer;
 use Stillat\SocialMediaImageKit\Contracts\ImageGenerator as ImageGeneratorContract;
@@ -117,6 +118,7 @@ class ServiceProvider extends AddonServiceProvider
         if (config('social_media_image_kit.general.preview_enabled', false)) {
             View::addNamespace('social-media-image-kit', __DIR__.'/../resources/views');
             SocialPreviewTemplateAction::register();
+            RecreateSocialMediaImages::register();
         }
     }
 

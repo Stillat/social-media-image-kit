@@ -172,7 +172,7 @@ abstract class AbstractImageGenerator implements ImageGeneratorContract
             $entry,
             $collection,
             $blueprint,
-            array_merge($cascade, $entry->toArray())
+            array_merge($cascade, $entry->toAugmentedArray())
         );
     }
 }

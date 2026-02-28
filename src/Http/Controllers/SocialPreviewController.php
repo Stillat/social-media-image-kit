@@ -32,7 +32,7 @@ class SocialPreviewController extends Controller
         }
 
         $cascade = Cascade::instance()->hydrate()->toArray();
-        $data = array_merge($cascade, $entry->toArray());
+        $data = array_merge($cascade, $entry->toAugmentedArray());
         $html = $this->templateManager->render($collection, $blueprint, $data);
 
         return view('social-media-image-kit::preview', [
